@@ -9,12 +9,11 @@ import { Router } from '@angular/router';
 })
 export class MainComponent {
 
-  name: string;
 
   constructor(
     private authService: AuthService,
     private router: Router
-  ) {this.name = ''; }
+  ) { }
 
   showData() {
     this.authService.getUserData().subscribe(
