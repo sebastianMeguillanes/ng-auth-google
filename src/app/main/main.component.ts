@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { AuthGoogleService } from '../auth-google.service';
+import { AuthService } from '../auth.service';
 import { Router } from '@angular/router';
 
 @Component({
@@ -12,22 +12,27 @@ export class MainComponent {
   name: string;
 
   constructor(
-    private authGoogleService: AuthGoogleService,
+    private authService: AuthService,
     private router: Router
   ) {this.name = ''; }
 
   showData() {
-    const profile = this.authGoogleService.getProfile();
-    const name = profile["name"];
+    this.authService.getUserData().subscribe(
+      (profile) => {
+        const displayName = profile.displayName; // Nombre completo
+        const givenName = profile.name.givenName; // Primer nombre
+        const familyName = profile.name.familyName; // Apellido
 
-
-    console.log(profile);
-    this.name = name;
+        console.log('Nombre completo:', displayName);
+        console.log('Primer nombre:', givenName);
+        console.log('Apellido:', familyName);
+      },
+      (error) => {
+        console.error('Error obteniendo datos del usuario:', error);
+      }
+    );
   }
-
   logOut() {
-    this.authGoogleService.logout();
-    this.router.navigate(['login']);
+    this.authService.logout();
   }
-
 }
